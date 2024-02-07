@@ -21,8 +21,6 @@
 - [Getting Started](#getting_started)
 - [Deployment](#deployment)
 - [Usage](#usage)
-- [TODO](../TODO.md)
-- [Contributing](../CONTRIBUTING.md)
 - [Authors](#authors)
 - [Acknowledgments](#acknowledgement)
 
@@ -104,5 +102,4 @@ Code will run on reboot once the proxmox service has started.
 ## 🎉 Acknowledgements <a name = "acknowledgement"></a>
 
 - Thanks to [@Dunuin](https://forum.proxmox.com/threads/run-systemd-service-after-proxmox-finished-starting.82284/) for the service code
--
 
