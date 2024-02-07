@@ -1,0 +1,11 @@
+[Unit]
+Description=PVE Start Script
+After=pve-guests.service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash /home/mdhmatt/usbup.sh
+User=root
+
+[Install]
+WantedBy=multi-user.target
