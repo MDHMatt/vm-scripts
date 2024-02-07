@@ -21,7 +21,6 @@
 - [Getting Started](#getting_started)
 - [Deployment](#deployment)
 - [Usage](#usage)
-- [Built Using](#built_using)
 - [TODO](../TODO.md)
 - [Contributing](../CONTRIBUTING.md)
 - [Authors](#authors)
@@ -31,7 +30,7 @@
 
 Laptop running proxmox not picking up USB3 to Eth adaptor running the realtek r8153 firmware. this script will unbind and rebind the onbard usb hub so that it forces the system to find the usb adaptor. This is so that should a remote reboot be needed a phisical removal and reinsertion of the device isnt needed.
 
-Cation must be made to ensure no mounted data drives are connected are needed during this script.
+#### Caution must be made to ensure no mounted data drives are connected are needed during this script.
 
 The script fires once proxmox has loaded.
 
@@ -41,7 +40,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-You need to find the usb root hub ID which can be found by following the guide found here (https://zedt.eu/tech/linux/restarting-usb-subsystem-centos/)
+You need to find the usb root hub ID which can be found by following the guide found here (https://zedt.eu/tech/linux/restarting-usb-subsystem-centos/ )
 
 copied below incase site dies
 ```
@@ -75,71 +74,35 @@ echo -n "0000:00:xx.y" > bind
 
 where instead of xx.y you fill in the correct set of numbers to use the IDs discovered above.
 ```
-```
-Give examples
-```
 
-### Installing
+### 🚀 Installing  <a name="deployment">
 
-A step by step series of examples that tell you how to get a development env running.
+Copy the `usbup.sh` file to a location on the proxmox host and make it exicutable with `chmod +x`
 
-Say what the step will be
+Copy the `restart-usb.service` systemd service file to
 
-```
-Give the example
-```
+`/etc/systemd/system/`
 
-And repeat
+adjust the `ExecStart` location to point ot the location of the `upusb.sh` file.
 
-```
-until finished
-```
+check that it will run
 
-End with an example of getting some data out of the system or using it for a little demo.
+`sudo systemctl start restart-usb.service`
 
-## 🔧 Running the tests <a name = "tests"></a>
+and make it start on boot.
 
-Explain how to run the automated tests for this system.
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
+`sudo systemctl enable restart-usb.service`
 
 ## 🎈 Usage <a name="usage"></a>
 
-Add notes about how to use the system.
-
-## 🚀 Deployment <a name = "deployment"></a>
-
-Add additional notes about how to deploy this on a live system.
-
-## ⛏️ Built Using <a name = "built_using"></a>
-
-- [MongoDB](https://www.mongodb.com/) - Database
-- [Express](https://expressjs.com/) - Server Framework
-- [VueJs](https://vuejs.org/) - Web Framework
-- [NodeJs](https://nodejs.org/en/) - Server Environment
+Code will run on reboot once the proxmox service has started.
 
 ## ✍️ Authors <a name = "authors"></a>
 
-- [@kylelobo](https://github.com/kylelobo) - Idea & Initial work
-
-See also the list of [contributors](https://github.com/kylelobo/The-Documentation-Compendium/contributors) who participated in this project.
+- [@mdhmatt](https://github.com/mdhmatt) - Idea & Initial work
 
 ## 🎉 Acknowledgements <a name = "acknowledgement"></a>
 
-- Hat tip to anyone whose code was used
-- Inspiration
-- References
+- Thanks to [@Dunuin](https://forum.proxmox.com/threads/run-systemd-service-after-proxmox-finished-starting.82284/) for the service code
+-
+
