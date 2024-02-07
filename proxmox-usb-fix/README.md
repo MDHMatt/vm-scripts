@@ -1,22 +1,17 @@
-<p align="center">
-  <a href="" rel="noopener">
- <img width=200px height=200px src="https://i.imgur.com/6wj0hh6.jpg" alt="Project logo"></a>
-</p>
-
-<h3 align="center">Project Title</h3>
+<h3 align="center">Proxmox USB Fix</h3>
 
 <div align="center">
 
-[![Status](https://img.shields.io/badge/status-active-success.svg)]()
-[![GitHub Issues](https://img.shields.io/github/issues/kylelobo/The-Documentation-Compendium.svg)](https://github.com/kylelobo/The-Documentation-Compendium/issues)
-[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/kylelobo/The-Documentation-Compendium.svg)](https://github.com/kylelobo/The-Documentation-Compendium/pulls)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
+[//]: # "[![Status](https://img.shields.io/badge/status-active-success.svg)]()"
+[//]: # "[![GitHub Issues](https://img.shields.io/github/issues/kylelobo/The-Documentation-Compendium.svg)](https://github.com/kylelobo/The-Documentation-Compendium/issues)"
+[//]: # "[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/kylelobo/The-Documentation-Compendium.svg)](https://github.com/kylelobo/The-Documentation-Compendium/pulls)"
+[//]: # "[![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)"
 
 </div>
 
 ---
 
-<p align="center"> Few lines describing your project.
+<p align="center"> Script to restart usb hub so that USB to eth device is recognised. Slighty hacky but works
     <br> 
 </p>
 
@@ -34,7 +29,11 @@
 
 ## 🧐 About <a name = "about"></a>
 
-Write about 1-2 paragraphs describing the purpose of your project.
+Laptop running proxmox not picking up USB3 to Eth adaptor running the realtek r8153 firmware. this script will unbind and rebind the onbard usb hub so that it forces the system to find the usb adaptor. This is so that should a remote reboot be needed a phisical removal and reinsertion of the device isnt needed.
+
+Cation must be made to ensure no mounted data drives are connected are needed during this script.
+
+The script fires once proxmox has loaded.
 
 ## 🏁 Getting Started <a name = "getting_started"></a>
 
@@ -42,8 +41,40 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-What things you need to install the software and how to install them.
+You need to find the usb root hub ID which can be found by following the guide found here (https://zedt.eu/tech/linux/restarting-usb-subsystem-centos/)
 
+copied below incase site dies
+```
+In cases like this, Linux (unlike Windows) can trigger a USB subsystem restart by deactivating and reactivating the USB controller(s).
+
+The hardware ID(s) of the controllers differ from manufacturer to manufacturer and from hardware to hardware. So the first thing to do is find out the correct hardware ID(s).
+
+Running
+
+cd /sys/bus/pci/drivers/ehci_hcd
+ls
+
+returns a list of one or more controller IDs, in the form of 0000:00:xx.y.
+
+Edit: For USB 3.0 controllers, use instead
+
+cd /sys/bus/pci/drivers/xhci_hcd
+ls
+
+On my system which has two AMD USB controllers, the following IDs are found:
+
+0000:00:12.2  0000:00:13.2  bind  module  new_id  remove_id  uevent  unbind
+
+Now that the ID or IDs are known, you need to run a set of commands that trigger the disabling and re-enabling of that device. You can run this command for a specific controller (if you know which one) or for all controllers if you don’t have anything critical connected to the USB. The command is:
+
+echo -n "0000:00:xx.y" > unbind
+
+Remember to enable them back:
+
+echo -n "0000:00:xx.y" > bind
+
+where instead of xx.y you fill in the correct set of numbers to use the IDs discovered above.
+```
 ```
 Give examples
 ```
