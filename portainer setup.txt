@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+echo "SSL certificates renewed"
+
+cp /etc/letsencrypt/live/oc1.mdhosting.co.uk/fullchain.pem /etc/cockpit/ws-certs.d/oc1.mdhosting.co.uk.crt
+cp /etc/letsencrypt/live/oc1.mdhosting.co.uk/privkey.pem /etc/cockpit/ws-certs.d/oc1.mdhosting.co.uk.key
+chown cockpit-ws:cockpit-ws /etc/cockpit/ws-certs.d/oc1.mdhosting.co.uk.crt /etc/cockpit/ws-certs.d/oc1.mdhosting.co.uk.key
+
+echo "Cockpit Restarted"
+systemctl restart cockpit
+
+
+docker run -d -p 9443:9443 -p 8000:8000 \
+    --name portainer --restart always \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    -v portainer_data:/data \
+    -v /etc/letsencrypt/live/oc1.mdhosting.co.uk:/certs/live/oc1.mdhosting.co.uk:ro \
+    -v /etc/letsencrypt/archive/oc1.mdhosting.co.uk:/certs/archive/oc1.mdhosting.co.uk:ro \
+    portainer/portainer-ee:latest \
+    --sslcert /certs/live/oc1.mdhosting.co.uk/fullchain.pem \
+    --sslkey /certs/live/oc1.mdhosting.co.uk/privkey.pem
